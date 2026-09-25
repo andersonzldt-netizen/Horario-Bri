@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Agenda - Clases y Trabajo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
     <style>
         :root {
             --primary: #db2777;
@@ -404,8 +405,7 @@
         </div>
 
         <div class="schedule-list" id="scheduleList">
-            <!-- Los elementos se inyectarán aquí -->
-        </div>
+            </div>
     </div>
 
     <script>
@@ -431,6 +431,13 @@
 
         let diaSeleccionadoGlobal = 'Lunes';
         let sonidoHabilitado = false;
+
+        // Registrar Service Worker para permitir la instalación PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log("Service Worker registrado con éxito"))
+                .catch((err) => console.log("Error al registrar Service Worker", err));
+        }
 
         function toggleTheme() {
             const body = document.body;
