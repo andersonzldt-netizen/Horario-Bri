@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Agenda - Clases y Trabajo (Angie)</title>
+    <title>Mi Agenda - Clases y Trabajo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --work-color: #10b981;
+            --primary: #db2777; /* Rosa / Fucsia elegante */
+            --primary-hover: #be185d;
+            --work-color: #0d9488; /* Turquesa sutil */
             --alert-color: #f59e0b;
-            --bg-gradient: linear-gradient(135deg, #f0f4ff 0%, #fdf2f8 100%);
-            --card-bg: rgba(255, 255, 255, 0.85);
-            --text-main: #0f172a;
-            --text-muted: #475569;
-            --border-color: rgba(226, 232, 240, 0.8);
-            --shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1), 0 8px 10px -6px rgba(99, 102, 241, 0.1);
+            --bg-gradient: linear-gradient(135deg, #fff1f2 0%, #fdf4ff 50%, #f0fdf4 100%);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --border-color: rgba(244, 114, 182, 0.2);
+            --shadow: 0 10px 25px -5px rgba(219, 39, 119, 0.08), 0 8px 10px -6px rgba(219, 39, 119, 0.05);
         }
 
         * {
@@ -48,7 +48,7 @@
             font-weight: 700;
             color: var(--text-main);
             margin-bottom: 6px;
-            background: linear-gradient(135deg, #6366f1, #a855f7);
+            background: linear-gradient(135deg, #db2777, #9333ea);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -59,7 +59,6 @@
             font-weight: 500;
         }
 
-        /* Panel de Alertas en Tiempo Real */
         .alert-banner {
             background: #ffffff;
             border: 2px solid var(--border-color);
@@ -163,7 +162,7 @@
             background: var(--primary);
             color: white;
             border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+            box-shadow: 0 4px 12px rgba(219, 39, 119, 0.3);
         }
 
         .schedule-list {
@@ -207,13 +206,13 @@
         }
 
         .badge-clase {
-            background: #e0e7ff;
+            background: #fce7f3;
             color: var(--primary-hover);
         }
 
         .badge-trabajo {
-            background: #d1fae5;
-            color: #065f46;
+            background: #ccfbf1;
+            color: #0f766e;
         }
 
         .schedule-time {
@@ -275,10 +274,9 @@
     <div class="container">
         <header>
             <h1>Mi Agenda Personal</h1>
-            <p>Clases y Trabajo (Angie) - Sede Chiclayo</p>
+            <p>Clases y Trabajo (Angie) - Sede Chiclayo ✨</p>
         </header>
 
-        <!-- Sección de Alertas y Notificaciones -->
         <div class="alert-banner" id="alertBanner">
             <div class="alert-text" id="alertText">🔔 Sistema de alertas activo. Comprobando eventos cercanos...</div>
             <button class="btn-audio" id="audioBtn" onclick="activarSonido()">Activar Alertas Sonoras 🔊</button>
@@ -315,10 +313,10 @@
             { tipo: 'trabajo', dia: 'Domingo', inicio: '14:00', fin: '22:00', hora: '02:00 PM - 10:00 PM', titulo: 'Turno Laboral (Angie)', sub1: 'Turno vespertino/nocturno', sub2: 'Presencial' },
 
             // --- CLASES ---
+            { tipo: 'clase', dia: 'Lunes', inicio: '08:00', fin: '12:30', hora: '08:00 AM - 12:30 PM', titulo: 'Computación', sub1: 'Sede Chiclayo', sub2: 'Laboratorio de Cómputo' },
             { tipo: 'clase', dia: 'Lunes', inicio: '20:30', fin: '22:10', hora: '08:30 PM - 10:10 PM', titulo: 'Consejo, Orientación y Asesoría Psicológica (AT1)', sub1: 'CALLIRGOS INGA, JUDI KATHERINE', sub2: 'A-202 (Sede Chiclayo)' },
             { tipo: 'clase', dia: 'Martes', inicio: '17:10', fin: '18:50', hora: '05:10 PM - 06:50 PM', titulo: 'Consejo, Orientación y Asesoría Psicológica (AP1)', sub1: 'CALLIRGOS INGA, JUDI KATHERINE', sub2: 'Taller Cámara Gesell - A (Sede Chiclayo)' },
-            { tipo: 'clase', dia: 'Miércoles', inicio: '08:00', fin: '09:40', hora: '08:00 AM - 09:40 AM', titulo: 'Intervención en Problemas Psicosociales (AT1)', sub1: 'JAIME UCEDA, RICARDO ALBERTO', sub2: 'A-503 (Sede Chiclayo)' },
-            { tipo: 'clase', dia: 'Miércoles', inicio: '11:20', fin: '13:00', hora: '11:20 AM - 01:00 PM', titulo: 'Intervención en Problemas Psicosociales (AP2)', sub1: 'JAIME UCEDA, RICARDO ALBERTO', sub2: 'A-503 (Sede Chiclayo)' },
+            { tipo: 'clase', dia: 'Miércoles', inicio: '08:00', fin: '11:20', hora: '08:00 AM - 11:20 AM', titulo: 'Intervención en Problemas Psicosociales (AT1 / AP2)', sub1: 'JAIME UCEDA, RICARDO ALBERTO', sub2: 'A-503 (Sede Chiclayo)' },
             { tipo: 'clase', dia: 'Miércoles', inicio: '18:50', fin: '21:20', hora: '06:50 PM - 09:20 PM', titulo: 'Consultoría de Servicios (AT1)', sub1: 'CORDOVA CANOVA, BORIS RICARDO', sub2: 'Clases Virtuales (Sede Chiclayo)' },
             { tipo: 'clase', dia: 'Miércoles', inicio: '21:20', fin: '23:00', hora: '09:20 PM - 11:00 PM', titulo: 'Consultoría de Servicios (AP1)', sub1: 'CORDOVA CANOVA, BORIS RICARDO', sub2: 'Clases Virtuales (Sede Chiclayo)' },
             { tipo: 'clase', dia: 'Viernes', inicio: '08:00', fin: '10:30', hora: '08:00 AM - 10:30 AM', titulo: 'Planes de Negocio (BT1)', sub1: 'CHAVARRY BECERRA, MILKEN RICARTTE', sub2: 'Laboratorio Cómputo 02 (Sede Chiclayo)' },
@@ -343,7 +341,7 @@
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'sine';
-                osc.frequency.value = 587.33; // Nota Re5
+                osc.frequency.value = 587.33;
                 gain.gain.setValueAtTime(0.1, ctx.currentTime);
                 osc.connect(gain);
                 gain.connect(ctx.destination);
@@ -371,7 +369,6 @@
                     const inicioMinutos = hIni * 60 + mIni;
                     const diferenciaMinutos = inicioMinutos - horaActualMinutos;
 
-                    // Si faltan entre 0 y 60 minutos para que empiece el evento
                     if (diferenciaMinutos >= 0 && diferenciaMinutos <= 60) {
                         eventoProximo = { ...item, minutosRestantes: diferenciaMinutos };
                     }
@@ -417,7 +414,7 @@
                         <div class="schedule-time">⏰ ${item.hora}</div>
                         <div class="schedule-title">${item.titulo}</div>
                         <div class="schedule-details">
-                            <div class="detail-row"><span>${esClase ? '👨‍🏫' : 'ℹ️'}</span> <span><strong>${esClase ? 'Docente:' : 'Detalle:'}</strong> ${item.sub1}</span></div>
+                            <div class="detail-row"><span>${esClase ? '👨‍🏫' : 'ℹ️'}</span> <span><strong>${esClase ? 'Detalle/Docente:' : 'Detalle:'}</strong> ${item.sub1}</span></div>
                             <div class="detail-row"><span>📍</span> <span><strong>Ubicación/Info:</strong> ${item.sub2}</span></div>
                         </div>
                     </div>
@@ -425,13 +422,11 @@
             });
         }
 
-        // Inicializar día actual
         const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
         const hoyStr = diasSemana[new Date().getDay()];
         const diaInicial = diasSemana.includes(hoyStr) ? hoyStr : 'Lunes';
         filterDay(diaInicial);
 
-        // Comprobar alertas cada 30 segundos
         setInterval(verificarAlertasProximas, 30000);
         verificarAlertasProximas();
     </script>
