@@ -3,130 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Horario Académico</title>
+    <title>Mi Agenda - Clases y Trabajo (Angie)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-dark: #4338ca;
-            --bg: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --work-color: #10b981;
+            --alert-color: #f59e0b;
+            --bg-gradient: linear-gradient(135deg, #f0f4ff 0%, #fdf2f8 100%);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --border-color: rgba(226, 232, 240, 0.8);
+            --shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1), 0 8px 10px -6px rgba(99, 102, 241, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 24px 16px;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         header h1 {
-            color: var(--primary);
-            margin-bottom: 5px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         header p {
-            color: var(--text-light);
+            color: var(--text-muted);
             font-size: 0.95rem;
+            font-weight: 500;
         }
 
-        .card-proxima {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        /* Panel de Alertas en Tiempo Real */
+        .alert-banner {
+            background: #ffffff;
+            border: 2px solid var(--border-color);
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: center;
+        }
+
+        .alert-banner.has-alert {
+            border-color: var(--alert-color);
+            background: #fffbeb;
+            animation: pulseAlert 1.5s infinite;
+        }
+
+        .alert-text {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .btn-audio {
+            background-color: var(--primary);
             color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            align-self: center;
         }
 
-        .card-proxima h3 {
-            margin-top: 0;
-            font-size: 1.1rem;
-            opacity: 0.9;
+        .btn-audio:hover {
+            background-color: var(--primary-hover);
         }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-class { background-color: var(--primary); }
+        .dot-work { background-color: var(--work-color); }
 
         .days-nav {
             display: flex;
             gap: 8px;
             overflow-x: auto;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            padding-bottom: 8px;
+            margin-bottom: 24px;
+            scrollbar-width: none;
+        }
+
+        .days-nav::-webkit-scrollbar {
+            display: none;
         }
 
         .day-btn {
             background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 10px 16px;
-            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 10px 18px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
-            color: var(--text-light);
+            font-size: 0.9rem;
+            color: var(--text-muted);
             white-space: nowrap;
-            transition: all 0.2s;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .day-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-1px);
         }
 
         .day-btn.active {
-            background-color: var(--primary);
+            background: var(--primary);
             color: white;
             border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
         }
 
         .schedule-list {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 16px;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
         .schedule-item {
             background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-left: 5px solid var(--primary);
-            padding: 16px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .schedule-item.clase {
+            border-left: 6px solid var(--primary);
+        }
+
+        .schedule-item.trabajo {
+            border-left: 6px solid var(--work-color);
+        }
+
+        .schedule-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-clase {
+            background: #e0e7ff;
+            color: var(--primary-hover);
+        }
+
+        .badge-trabajo {
+            background: #d1fae5;
+            color: #065f46;
         }
 
         .schedule-time {
-            font-weight: bold;
-            color: var(--primary);
-            font-size: 1.05rem;
-            margin-bottom: 5px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-bottom: 6px;
         }
 
         .schedule-title {
-            font-size: 1.1rem;
-            font-weight: bold;
-            margin-bottom: 8px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            line-height: 1.4;
         }
 
         .schedule-details {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
             font-size: 0.9rem;
-            color: var(--text-light);
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 5px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            padding-top: 12px;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .empty-day {
             text-align: center;
-            padding: 40px;
-            color: var(--text-light);
+            padding: 48px 20px;
+            color: var(--text-muted);
             background: var(--card-bg);
-            border-radius: 8px;
-            border: 1px solid var(--border);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            font-weight: 500;
+            box-shadow: var(--shadow);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseAlert {
+            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
         }
     </style>
 </head>
@@ -134,13 +274,19 @@
 
     <div class="container">
         <header>
-            <h1>Mi Horario de Clases</h1>
-            <p>Sede Chiclayo - Ciclo Académico</p>
+            <h1>Mi Agenda Personal</h1>
+            <p>Clases y Trabajo (Angie) - Sede Chiclayo</p>
         </header>
 
-        <div class="card-proxima" id="proxima-clase">
-            <h3>📌 Información del Horario</h3>
-            <p id="info-proxima">Selecciona un día en la barra inferior para consultar tus clases programadas.</p>
+        <!-- Sección de Alertas y Notificaciones -->
+        <div class="alert-banner" id="alertBanner">
+            <div class="alert-text" id="alertText">🔔 Sistema de alertas activo. Comprobando eventos cercanos...</div>
+            <button class="btn-audio" id="audioBtn" onclick="activarSonido()">Activar Alertas Sonoras 🔊</button>
+        </div>
+
+        <div class="legend">
+            <div class="legend-item"><span class="dot dot-class"></span> Clases</div>
+            <div class="legend-item"><span class="dot dot-work"></span> Trabajo (Angie)</div>
         </div>
 
         <div class="days-nav" id="daysNav">
@@ -154,83 +300,96 @@
         </div>
 
         <div class="schedule-list" id="scheduleList">
-            <!-- Las clases se inyectarán aquí mediante JavaScript -->
+            <!-- Los elementos se inyectarán aquí -->
         </div>
     </div>
 
     <script>
-        const horario = [
-            {
-                dia: 'Lunes',
-                hora: '08:30 PM - 10:10 PM',
-                asignatura: 'Consejo, Orientación y Asesoría Psicológica (AT1)',
-                docente: 'CALLIRGOS INGA, JUDI KATHERINE',
-                ambiente: 'A-202 (SEDE CHICLAYO)'
-            },
-            {
-                dia: 'Martes',
-                hora: '05:10 PM - 06:50 PM',
-                asignatura: 'Consejo, Orientación y Asesoría Psicológica (AP1)',
-                docente: 'CALLIRGOS INGA, JUDI KATHERINE',
-                ambiente: 'Taller Cámara Gesell - A (SEDE CHICLAYO)'
-            },
-            {
-                dia: 'Miércoles',
-                hora: '08:00 AM - 09:40 AM',
-                asignatura: 'Intervención en Problemas Psicosociales (AT1)',
-                docente: 'JAIME UCEDA, RICARDO ALBERTO',
-                ambiente: 'A-503 (SEDE CHICLAYO)'
-            },
-            {
-                dia: 'Miércoles',
-                hora: '11:20 AM - 01:00 PM',
-                asignatura: 'Intervención en Problemas Psicosociales (AP2)',
-                docente: 'JAIME UCEDA, RICARDO ALBERTO',
-                ambiente: 'A-503 (SEDE CHICLAYO)'
-            },
-            {
-                dia: 'Miércoles',
-                hora: '06:50 PM - 09:20 PM',
-                asignatura: 'Consultoría de Servicios (AT1)',
-                docente: 'CORDOVA CANOVA, BORIS RICARDO',
-                ambiente: 'Clases Virtuales (SEDE CHICLAYO)'
-            },
-            {
-                dia: 'Miércoles',
-                hora: '09:20 PM - 11:00 PM',
-                asignatura: 'Consultoría de Servicios (AP1)',
-                docente: 'CORDOVA CANOVA, BORIS RICARDO',
-                ambiente: 'Clases Virtuales (SEDE CHICLAYO)'
-            },
-            {
-                dia: 'Viernes',
-                hora: '08:00 AM - 10:30 AM',
-                asignatura: 'Planes de Negocio (BT1)',
-                docente: 'CHAVARRY BECERRA, MILKEN RICARTTE',
-                ambiente: 'Laboratorio Cómputo 02 (SEDE CHICLAYO)'
-            },
-            {
-                dia: 'Viernes',
-                hora: '10:30 AM - 12:10 PM',
-                asignatura: 'Planes de Negocio (BP1)',
-                docente: 'CHAVARRY BECERRA, MILKEN RICARTTE',
-                ambiente: 'Laboratorio Cómputo 02 (SEDE CHICLAYO)'
-            },
-            {
-                dia: 'Domingo',
-                hora: '08:00 AM - 10:30 AM',
-                asignatura: 'Evaluación y Selección de Personas (AT1)',
-                docente: 'GONZALEZ RUEDA, NESTOR DANIEL',
-                ambiente: 'A-604 (SEDE CHICLAYO)'
-            },
-            {
-                dia: 'Domingo',
-                hora: '10:30 AM - 12:10 PM',
-                asignatura: 'Evaluación y Selección de Personas (AP1)',
-                docente: 'GONZALEZ RUEDA, NESTOR DANIEL',
-                ambiente: 'A-604 (SEDE CHICLAYO)'
-            }
+        const agenda = [
+            // --- TRABAJO (Angie) ---
+            { tipo: 'trabajo', dia: 'Lunes', inicio: '10:00', fin: '19:30', hora: '10:00 AM - 07:30 PM', titulo: 'Turno Laboral (Angie)', sub1: 'Incluye 1:30 hr de almuerzo', sub2: 'Presencial / Jornada laboral' },
+            { tipo: 'trabajo', dia: 'Martes', inicio: '10:00', fin: '16:00', hora: '10:00 AM - 04:00 PM', titulo: 'Turno Laboral (Angie)', sub1: 'Turno parcial', sub2: 'Presencial' },
+            { tipo: 'trabajo', dia: 'Jueves', inicio: '10:00', fin: '22:00', hora: '10:00 AM - 10:00 PM', titulo: 'Turno Laboral (Angie)', sub1: 'Incluye 2 hrs de almuerzo', sub2: 'Presencial / Jornada completa' },
+            { tipo: 'trabajo', dia: 'Viernes', inicio: '17:00', fin: '22:00', hora: '05:00 PM - 10:00 PM', titulo: 'Turno Laboral (Angie)', sub1: 'Turno vespertino/nocturno', sub2: 'Presencial' },
+            { tipo: 'trabajo', dia: 'Sábado', inicio: '11:00', fin: '22:00', hora: '11:00 AM - 10:00 PM', titulo: 'Turno Laboral (Angie)', sub1: 'Incluye 2 hrs de almuerzo', sub2: 'Presencial / Jornada completa' },
+            { tipo: 'trabajo', dia: 'Domingo', inicio: '14:00', fin: '22:00', hora: '02:00 PM - 10:00 PM', titulo: 'Turno Laboral (Angie)', sub1: 'Turno vespertino/nocturno', sub2: 'Presencial' },
+
+            // --- CLASES ---
+            { tipo: 'clase', dia: 'Lunes', inicio: '20:30', fin: '22:10', hora: '08:30 PM - 10:10 PM', titulo: 'Consejo, Orientación y Asesoría Psicológica (AT1)', sub1: 'CALLIRGOS INGA, JUDI KATHERINE', sub2: 'A-202 (Sede Chiclayo)' },
+            { tipo: 'clase', dia: 'Martes', inicio: '17:10', fin: '18:50', hora: '05:10 PM - 06:50 PM', titulo: 'Consejo, Orientación y Asesoría Psicológica (AP1)', sub1: 'CALLIRGOS INGA, JUDI KATHERINE', sub2: 'Taller Cámara Gesell - A (Sede Chiclayo)' },
+            { tipo: 'clase', dia: 'Miércoles', inicio: '08:00', fin: '09:40', hora: '08:00 AM - 09:40 AM', titulo: 'Intervención en Problemas Psicosociales (AT1)', sub1: 'JAIME UCEDA, RICARDO ALBERTO', sub2: 'A-503 (Sede Chiclayo)' },
+            { tipo: 'clase', dia: 'Miércoles', inicio: '11:20', fin: '13:00', hora: '11:20 AM - 01:00 PM', titulo: 'Intervención en Problemas Psicosociales (AP2)', sub1: 'JAIME UCEDA, RICARDO ALBERTO', sub2: 'A-503 (Sede Chiclayo)' },
+            { tipo: 'clase', dia: 'Miércoles', inicio: '18:50', fin: '21:20', hora: '06:50 PM - 09:20 PM', titulo: 'Consultoría de Servicios (AT1)', sub1: 'CORDOVA CANOVA, BORIS RICARDO', sub2: 'Clases Virtuales (Sede Chiclayo)' },
+            { tipo: 'clase', dia: 'Miércoles', inicio: '21:20', fin: '23:00', hora: '09:20 PM - 11:00 PM', titulo: 'Consultoría de Servicios (AP1)', sub1: 'CORDOVA CANOVA, BORIS RICARDO', sub2: 'Clases Virtuales (Sede Chiclayo)' },
+            { tipo: 'clase', dia: 'Viernes', inicio: '08:00', fin: '10:30', hora: '08:00 AM - 10:30 AM', titulo: 'Planes de Negocio (BT1)', sub1: 'CHAVARRY BECERRA, MILKEN RICARTTE', sub2: 'Laboratorio Cómputo 02 (Sede Chiclayo)' },
+            { tipo: 'clase', dia: 'Viernes', inicio: '10:30', fin: '12:10', hora: '10:30 AM - 12:10 PM', titulo: 'Planes de Negocio (BP1)', sub1: 'CHAVARRY BECERRA, MILKEN RICARTTE', sub2: 'Laboratorio Cómputo 02 (Sede Chiclayo)' },
+            { tipo: 'clase', dia: 'Domingo', inicio: '08:00', fin: '10:30', hora: '08:00 AM - 10:30 AM', titulo: 'Evaluación y Selección de Personas (AT1)', sub1: 'GONZALEZ RUEDA, NESTOR DANIEL', sub2: 'A-604 (Sede Chiclayo)' },
+            { tipo: 'clase', dia: 'Domingo', inicio: '10:30', fin: '12:10', hora: '10:30 AM - 12:10 PM', titulo: 'Evaluación y Selección de Personas (AP1)', sub1: 'GONZALEZ RUEDA, NESTOR DANIEL', sub2: 'A-604 (Sede Chiclayo)' }
         ];
+
+        let sonidoHabilitado = false;
+
+        function activarSonido() {
+            sonidoHabilitado = true;
+            document.getElementById('audioBtn').style.display = 'none';
+            document.getElementById('alertText').innerHTML = '🔊 Alertas sonoras y visuales activadas correctamente.';
+            reproducirBeep();
+        }
+
+        function reproducirBeep() {
+            if (!sonidoHabilitado) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = 587.33; // Nota Re5
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.3);
+            } catch (e) {
+                console.log("Audio no soportado automáticamente");
+            }
+        }
+
+        function verificarAlertasProximas() {
+            const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            const ahora = new Date();
+            const diaHoy = diasSemana[ahora.getDay()];
+            const horaActualMinutos = ahora.getHours() * 60 + ahora.getMinutes();
+
+            const banner = document.getElementById('alertBanner');
+            const textoAlerta = document.getElementById('alertText');
+            
+            let eventoProximo = null;
+
+            agenda.forEach(item => {
+                if (item.dia === diaHoy) {
+                    const [hIni, mIni] = item.inicio.split(':').map(Number);
+                    const inicioMinutos = hIni * 60 + mIni;
+                    const diferenciaMinutos = inicioMinutos - horaActualMinutos;
+
+                    // Si faltan entre 0 y 60 minutos para que empiece el evento
+                    if (diferenciaMinutos >= 0 && diferenciaMinutos <= 60) {
+                        eventoProximo = { ...item, minutosRestantes: diferenciaMinutos };
+                    }
+                }
+            });
+
+            if (eventoProximo) {
+                banner.classList.add('has-alert');
+                const tipoTexto = eventoProximo.tipo === 'clase' ? '📚 Tu clase' : '💼 Tu turno de trabajo';
+                textoAlerta.innerHTML = `⚠️ <strong>¡Atención!</strong> ${tipoTexto} "<strong>${eventoProximo.titulo}</strong>" empieza en <strong>${eventoProximo.minutosRestantes} minutos</strong> (${eventoProximo.hora}).`;
+                reproducirBeep();
+            } else {
+                banner.classList.remove('has-alert');
+                if (sonidoHabilitado) {
+                    textoAlerta.innerHTML = '✅ Todo tranquilo por ahora. No hay eventos en la próxima hora.';
+                }
+            }
+        }
 
         function filterDay(diaSeleccionado) {
             document.querySelectorAll('.day-btn').forEach(btn => {
@@ -241,34 +400,40 @@
             const contenedor = document.getElementById('scheduleList');
             contenedor.innerHTML = '';
 
-            const filtradas = horario.filter(item => item.dia === diaSeleccionado);
+            const filtradas = agenda.filter(item => item.dia === diaSeleccionado);
 
             if(filtradas.length === 0) {
-                contenedor.innerHTML = `<div class="empty-day">☕ ¡Día libre! No tienes clases programadas.</div>`;
+                contenedor.innerHTML = `<div class="empty-day">☕ ¡Día libre! No tienes actividades registradas.</div>`;
                 return;
             }
 
-            filtradas.forEach(clase => {
+            filtradas.forEach(item => {
+                const esClase = item.tipo === 'clase';
                 contenedor.innerHTML += `
-                    <div class="schedule-item">
-                        <div class="schedule-time">⏰ ${clase.hora}</div>
-                        <div class="schedule-title">${clase.asignatura}</div>
+                    <div class="schedule-item ${item.tipo}">
+                        <span class="badge ${esClase ? 'badge-clase' : 'badge-trabajo'}">
+                            ${esClase ? '📚 Clase' : '💼 Trabajo (Angie)'}
+                        </span>
+                        <div class="schedule-time">⏰ ${item.hora}</div>
+                        <div class="schedule-title">${item.titulo}</div>
                         <div class="schedule-details">
-                            <span>👨‍🏫 <strong>Docente:</strong> ${clase.docente}</span>
-                            <span>📍 <strong>Ambiente:</strong> ${clase.ambiente}</span>
+                            <div class="detail-row"><span>${esClase ? '👨‍🏫' : 'ℹ️'}</span> <span><strong>${esClase ? 'Docente:' : 'Detalle:'}</strong> ${item.sub1}</span></div>
+                            <div class="detail-row"><span>📍</span> <span><strong>Ubicación/Info:</strong> ${item.sub2}</span></div>
                         </div>
                     </div>
                 `;
             });
         }
 
-        // Detectar el día actual de la semana en español
+        // Inicializar día actual
         const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
         const hoyStr = diasSemana[new Date().getDay()];
-        
-        // Inicializar con el día actual
         const diaInicial = diasSemana.includes(hoyStr) ? hoyStr : 'Lunes';
         filterDay(diaInicial);
+
+        // Comprobar alertas cada 30 segundos
+        setInterval(verificarAlertasProximas, 30000);
+        verificarAlertasProximas();
     </script>
 </body>
 </html>
