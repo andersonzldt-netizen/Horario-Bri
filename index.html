@@ -7,9 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #db2777; /* Rosa / Fucsia elegante */
+            --primary: #db2777;
             --primary-hover: #be185d;
-            --work-color: #0d9488; /* Turquesa sutil */
+            --work-color: #0d9488;
             --alert-color: #f59e0b;
             --bg-gradient: linear-gradient(135deg, #fff1f2 0%, #fdf4ff 50%, #f0fdf4 100%);
             --card-bg: rgba(255, 255, 255, 0.9);
@@ -19,10 +19,24 @@
             --shadow: 0 10px 25px -5px rgba(219, 39, 119, 0.08), 0 8px 10px -6px rgba(219, 39, 119, 0.05);
         }
 
+        [data-theme="dark"] {
+            --primary: #f472b6;
+            --primary-hover: #db2777;
+            --work-color: #2dd4bf;
+            --alert-color: #fbbf24;
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #064e3b 100%);
+            --card-bg: rgba(30, 41, 59, 0.85);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(244, 114, 182, 0.15);
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
         body {
@@ -41,14 +55,28 @@
         header {
             text-align: center;
             margin-bottom: 20px;
+            position: relative;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow);
         }
 
         header h1 {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--text-main);
             margin-bottom: 6px;
-            background: linear-gradient(135deg, #db2777, #9333ea);
+            background: linear-gradient(135deg, var(--primary), #9333ea);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -59,8 +87,69 @@
             font-weight: 500;
         }
 
+        .progress-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: var(--border-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--work-color));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .actions-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-export {
+            background-color: var(--work-color);
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-export:hover {
+            opacity: 0.9;
+        }
+
         .alert-banner {
-            background: #ffffff;
+            background: var(--card-bg);
             border: 2px solid var(--border-color);
             padding: 16px;
             border-radius: 16px;
@@ -74,7 +163,6 @@
 
         .alert-banner.has-alert {
             border-color: var(--alert-color);
-            background: #fffbeb;
             animation: pulseAlert 1.5s infinite;
         }
 
@@ -93,12 +181,7 @@
             font-weight: 600;
             font-size: 0.85rem;
             cursor: pointer;
-            transition: background 0.2s;
             align-self: center;
-        }
-
-        .btn-audio:hover {
-            background-color: var(--primary-hover);
         }
 
         .legend {
@@ -114,6 +197,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            color: var(--text-muted);
         }
 
         .dot {
@@ -148,14 +232,7 @@
             font-size: 0.9rem;
             color: var(--text-muted);
             white-space: nowrap;
-            transition: all 0.25s ease;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .day-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            transform: translateY(-1px);
         }
 
         .day-btn.active {
@@ -179,7 +256,7 @@
             padding: 20px;
             border-radius: 16px;
             box-shadow: var(--shadow);
-            transition: transform 0.2s ease;
+            position: relative;
         }
 
         .schedule-item.clase {
@@ -190,8 +267,22 @@
             border-left: 6px solid var(--work-color);
         }
 
-        .schedule-item:hover {
-            transform: translateY(-2px);
+        .schedule-item.live-now {
+            border: 2px solid var(--alert-color);
+        }
+
+        .live-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--alert-color);
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 4px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            animation: pulseAlert 1.2s infinite;
         }
 
         .badge {
@@ -206,13 +297,13 @@
         }
 
         .badge-clase {
-            background: #fce7f3;
-            color: var(--primary-hover);
+            background: rgba(219, 39, 119, 0.15);
+            color: var(--primary);
         }
 
         .badge-trabajo {
-            background: #ccfbf1;
-            color: #0f766e;
+            background: rgba(13, 148, 136, 0.15);
+            color: var(--work-color);
         }
 
         .schedule-time {
@@ -263,19 +354,34 @@
         }
 
         @keyframes pulseAlert {
-            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
     <div class="container">
         <header>
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙 Oscuro</button>
             <h1>Mi Agenda Personal</h1>
-            <p>Clases y Trabajo (Angie) - Sede Chiclayo ✨</p>
+            <p>Clases y Trabajo (Bri) - Sede Chiclayo ✨</p>
         </header>
+
+        <div class="progress-container">
+            <div class="progress-info">
+                <span>Progreso semanal estimado</span>
+                <span id="progressText">0% completado</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div class="actions-bar">
+            <button class="btn-export" onclick="descargarCalendarioICS()">📥 Exportar a Google Calendar (.ics)</button>
+        </div>
 
         <div class="alert-banner" id="alertBanner">
             <div class="alert-text" id="alertText">🔔 Sistema de alertas activo. Comprobando eventos cercanos...</div>
@@ -284,7 +390,7 @@
 
         <div class="legend">
             <div class="legend-item"><span class="dot dot-class"></span> Clases</div>
-            <div class="legend-item"><span class="dot dot-work"></span> Trabajo (Angie)</div>
+            <div class="legend-item"><span class="dot dot-work"></span> Trabajo (Bri)</div>
         </div>
 
         <div class="days-nav" id="daysNav">
@@ -304,15 +410,13 @@
 
     <script>
         const agenda = [
-            // --- TRABAJO (Angie) ---
-            { tipo: 'trabajo', dia: 'Lunes', inicio: '10:00', fin: '19:30', hora: '10:00 AM - 07:30 PM', titulo: 'Turno Laboral (Angie)', sub1: 'Incluye 1:30 hr de almuerzo', sub2: 'Presencial / Jornada laboral' },
-            { tipo: 'trabajo', dia: 'Martes', inicio: '10:00', fin: '16:00', hora: '10:00 AM - 04:00 PM', titulo: 'Turno Laboral (Angie)', sub1: 'Turno parcial', sub2: 'Presencial' },
-            { tipo: 'trabajo', dia: 'Jueves', inicio: '10:00', fin: '22:00', hora: '10:00 AM - 10:00 PM', titulo: 'Turno Laboral (Angie)', sub1: 'Incluye 2 hrs de almuerzo', sub2: 'Presencial / Jornada completa' },
-            { tipo: 'trabajo', dia: 'Viernes', inicio: '17:00', fin: '22:00', hora: '05:00 PM - 10:00 PM', titulo: 'Turno Laboral (Angie)', sub1: 'Turno vespertino/nocturno', sub2: 'Presencial' },
-            { tipo: 'trabajo', dia: 'Sábado', inicio: '11:00', fin: '22:00', hora: '11:00 AM - 10:00 PM', titulo: 'Turno Laboral (Angie)', sub1: 'Incluye 2 hrs de almuerzo', sub2: 'Presencial / Jornada completa' },
-            { tipo: 'trabajo', dia: 'Domingo', inicio: '14:00', fin: '22:00', hora: '02:00 PM - 10:00 PM', titulo: 'Turno Laboral (Angie)', sub1: 'Turno vespertino/nocturno', sub2: 'Presencial' },
+            { tipo: 'trabajo', dia: 'Lunes', inicio: '10:00', fin: '19:30', hora: '10:00 AM - 07:30 PM', titulo: 'Turno Laboral (Bri)', sub1: 'Incluye 1:30 hr de almuerzo', sub2: 'Presencial / Jornada laboral' },
+            { tipo: 'trabajo', dia: 'Martes', inicio: '10:00', fin: '16:00', hora: '10:00 AM - 04:00 PM', titulo: 'Turno Laboral (Bri)', sub1: 'Turno parcial', sub2: 'Presencial' },
+            { tipo: 'trabajo', dia: 'Jueves', inicio: '10:00', fin: '22:00', hora: '10:00 AM - 10:00 PM', titulo: 'Turno Laboral (Bri)', sub1: 'Incluye 2 hrs de almuerzo', sub2: 'Presencial / Jornada completa' },
+            { tipo: 'trabajo', dia: 'Viernes', inicio: '17:00', fin: '22:00', hora: '05:00 PM - 10:00 PM', titulo: 'Turno Laboral (Bri)', sub1: 'Turno vespertino/nocturno', sub2: 'Presencial' },
+            { tipo: 'trabajo', dia: 'Sábado', inicio: '11:00', fin: '22:00', hora: '11:00 AM - 10:00 PM', titulo: 'Turno Laboral (Bri)', sub1: 'Incluye 2 hrs de almuerzo', sub2: 'Presencial / Jornada completa' },
+            { tipo: 'trabajo', dia: 'Domingo', inicio: '14:00', fin: '22:00', hora: '02:00 PM - 10:00 PM', titulo: 'Turno Laboral (Bri)', sub1: 'Turno vespertino/nocturno', sub2: 'Presencial' },
 
-            // --- CLASES ---
             { tipo: 'clase', dia: 'Lunes', inicio: '08:00', fin: '12:30', hora: '08:00 AM - 12:30 PM', titulo: 'Computación', sub1: 'Sede Chiclayo', sub2: 'Laboratorio de Cómputo' },
             { tipo: 'clase', dia: 'Lunes', inicio: '20:30', fin: '22:10', hora: '08:30 PM - 10:10 PM', titulo: 'Consejo, Orientación y Asesoría Psicológica (AT1)', sub1: 'CALLIRGOS INGA, JUDI KATHERINE', sub2: 'A-202 (Sede Chiclayo)' },
             { tipo: 'clase', dia: 'Martes', inicio: '17:10', fin: '18:50', hora: '05:10 PM - 06:50 PM', titulo: 'Consejo, Orientación y Asesoría Psicológica (AP1)', sub1: 'CALLIRGOS INGA, JUDI KATHERINE', sub2: 'Taller Cámara Gesell - A (Sede Chiclayo)' },
@@ -325,7 +429,20 @@
             { tipo: 'clase', dia: 'Domingo', inicio: '10:30', fin: '12:10', hora: '10:30 AM - 12:10 PM', titulo: 'Evaluación y Selección de Personas (AP1)', sub1: 'GONZALEZ RUEDA, NESTOR DANIEL', sub2: 'A-604 (Sede Chiclayo)' }
         ];
 
+        let diaSeleccionadoGlobal = 'Lunes';
         let sonidoHabilitado = false;
+
+        function toggleTheme() {
+            const body = document.body;
+            const btn = document.getElementById('themeBtn');
+            if (body.getAttribute('data-theme') === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                btn.innerHTML = '☀️ Claro';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                btn.innerHTML = '🌙 Oscuro';
+            }
+        }
 
         function activarSonido() {
             sonidoHabilitado = true;
@@ -350,6 +467,32 @@
             } catch (e) {
                 console.log("Audio no soportado automáticamente");
             }
+        }
+
+        function actualizarProgresoSemanal() {
+            const ahora = new Date();
+            const diasOrden = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+            const diaHoyIdx = (ahora.getDay() + 6) % 7; 
+            const horaActualMin = ahora.getHours() * 60 + ahora.getMinutes();
+
+            let totalEventos = agenda.length;
+            let completados = 0;
+
+            agenda.forEach(item => {
+                const itemDiaIdx = diasOrden.indexOf(item.dia);
+                const [hFin, mFin] = item.fin.split(':').map(Number);
+                const finMin = hFin * 60 + mFin;
+
+                if (itemDiaIdx < diaHoyIdx) {
+                    completados++;
+                } else if (itemDiaIdx === diaHoyIdx && horaActualMin > finMin) {
+                    completados++;
+                }
+            });
+
+            const porcentaje = Math.round((completados / totalEventos) * 100);
+            document.getElementById('progressBar').style.width = porcentaje + '%';
+            document.getElementById('progressText').innerText = porcentaje + '% de la semana completado';
         }
 
         function verificarAlertasProximas() {
@@ -386,13 +529,19 @@
                     textoAlerta.innerHTML = '✅ Todo tranquilo por ahora. No hay eventos en la próxima hora.';
                 }
             }
+
+            actualizarProgresoSemanal();
+            filterDay(diaSeleccionadoGlobal, false);
         }
 
-        function filterDay(diaSeleccionado) {
-            document.querySelectorAll('.day-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if(btn.textContent === diaSeleccionado) btn.classList.add('active');
-            });
+        function filterDay(diaSeleccionado, actualizarBoton = true) {
+            diaSeleccionadoGlobal = diaSeleccionado;
+            if (actualizarBoton) {
+                document.querySelectorAll('.day-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if(btn.textContent === diaSeleccionado) btn.classList.add('active');
+                });
+            }
 
             const contenedor = document.getElementById('scheduleList');
             contenedor.innerHTML = '';
@@ -404,12 +553,30 @@
                 return;
             }
 
+            const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            const ahora = new Date();
+            const diaHoyStr = diasSemana[ahora.getDay()];
+            const horaActualMinutos = ahora.getHours() * 60 + ahora.getMinutes();
+
             filtradas.forEach(item => {
                 const esClase = item.tipo === 'clase';
+                
+                let enVivo = false;
+                if (item.dia === diaHoyStr) {
+                    const [hIni, mIni] = item.inicio.split(':').map(Number);
+                    const [hFin, mFin] = item.fin.split(':').map(Number);
+                    const iniMin = hIni * 60 + mIni;
+                    const finMin = hFin * 60 + mFin;
+                    if (horaActualMinutos >= iniMin && horaActualMinutos <= finMin) {
+                        enVivo = true;
+                    }
+                }
+
                 contenedor.innerHTML += `
-                    <div class="schedule-item ${item.tipo}">
+                    <div class="schedule-item ${item.tipo} ${enVivo ? 'live-now' : ''}">
+                        ${enVivo ? '<div class="live-badge">🟢 En Vivo Ahora</div>' : ''}
                         <span class="badge ${esClase ? 'badge-clase' : 'badge-trabajo'}">
-                            ${esClase ? '📚 Clase' : '💼 Trabajo (Angie)'}
+                            ${esClase ? '📚 Clase' : '💼 Trabajo (Bri)'}
                         </span>
                         <div class="schedule-time">⏰ ${item.hora}</div>
                         <div class="schedule-title">${item.titulo}</div>
@@ -420,6 +587,46 @@
                     </div>
                 `;
             });
+        }
+
+        function descargarCalendarioICS() {
+            const mapDia = { 'Lunes': 'MO', 'Martes': 'TU', 'Miércoles': 'WE', 'Jueves': 'TH', 'Viernes': 'FR', 'Sábado': 'SA', 'Domingo': 'SU' };
+            let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Mi Agenda Personal//ES\nCALSCALE:GREGORIO\nMETHOD:PUBLISH\n";
+            const baseDate = new Date(2026, 8, 21); 
+
+            agenda.forEach((item, index) => {
+                const [hIni, mIni] = item.inicio.split(':').map(Number);
+                const [hFin, mFin] = item.fin.split(':').map(Number);
+                const diasOffset = { 'Lunes': 0, 'Martes': 1, 'Miércoles': 2, 'Jueves': 3, 'Viernes': 4, 'Sábado': 5, 'Domingo': 6 };
+                let eventoDate = new Date(baseDate);
+                eventoDate.setDate(baseDate.getDate() + diasOffset[item.dia]);
+                eventoDate.setHours(hIni, mIni, 0);
+
+                let endDate = new Date(eventoDate);
+                endDate.setHours(hFin, mFin, 0);
+
+                const formatDate = (d) => d.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+
+                icsContent += "BEGIN:VEVENT\n";
+                icsContent += `UID:agenda-${index}-${Date.now()}@miagenda.local\n`;
+                icsContent += `DTSTAMP:${formatDate(new Date())}\n`;
+                icsContent += `DTSTART:${formatDate(eventoDate)}\n`;
+                icsContent += `DTEND:${formatDate(endDate)}\n`;
+                icsContent += `SUMMARY:${item.titulo}\n`;
+                icsContent += `DESCRIPTION:${item.sub1} - ${item.sub2}\n`;
+                icsContent += `RRULE:FREQ=WEEKLY;BYDAY=${mapDia[item.dia]}\n`;
+                icsContent += "END:VEVENT\n";
+            });
+
+            icsContent += "END:VCALENDAR";
+
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.setAttribute('download', 'mi_agenda_clases_trabajo.ics');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
