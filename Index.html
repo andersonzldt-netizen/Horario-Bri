@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Horario Académico</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #4338ca;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .card-proxima {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-proxima h3 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .days-nav {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .day-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-light);
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .day-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .schedule-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-left: 5px solid var(--primary);
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .schedule-time {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.05rem;
+            margin-bottom: 5px;
+        }
+
+        .schedule-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .schedule-details {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 5px;
+        }
+
+        .empty-day {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Mi Horario de Clases</h1>
+            <p>Sede Chiclayo - Ciclo Académico</p>
+        </header>
+
+        <div class="card-proxima" id="proxima-clase">
+            <h3>📌 Información del Horario</h3>
+            <p id="info-proxima">Selecciona un día en la barra inferior para consultar tus clases programadas.</p>
+        </div>
+
+        <div class="days-nav" id="daysNav">
+            <button class="day-btn" onclick="filterDay('Lunes')">Lunes</button>
+            <button class="day-btn" onclick="filterDay('Martes')">Martes</button>
+            <button class="day-btn" onclick="filterDay('Miércoles')">Miércoles</button>
+            <button class="day-btn" onclick="filterDay('Jueves')">Jueves</button>
+            <button class="day-btn" onclick="filterDay('Viernes')">Viernes</button>
+            <button class="day-btn" onclick="filterDay('Sábado')">Sábado</button>
+            <button class="day-btn" onclick="filterDay('Domingo')">Domingo</button>
+        </div>
+
+        <div class="schedule-list" id="scheduleList">
+            <!-- Las clases se inyectarán aquí mediante JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        const horario = [
+            {
+                dia: 'Lunes',
+                hora: '08:30 PM - 10:10 PM',
+                asignatura: 'Consejo, Orientación y Asesoría Psicológica (AT1)',
+                docente: 'CALLIRGOS INGA, JUDI KATHERINE',
+                ambiente: 'A-202 (SEDE CHICLAYO)'
+            },
+            {
+                dia: 'Martes',
+                hora: '05:10 PM - 06:50 PM',
+                asignatura: 'Consejo, Orientación y Asesoría Psicológica (AP1)',
+                docente: 'CALLIRGOS INGA, JUDI KATHERINE',
+                ambiente: 'Taller Cámara Gesell - A (SEDE CHICLAYO)'
+            },
+            {
+                dia: 'Miércoles',
+                hora: '08:00 AM - 09:40 AM',
+                asignatura: 'Intervención en Problemas Psicosociales (AT1)',
+                docente: 'JAIME UCEDA, RICARDO ALBERTO',
+                ambiente: 'A-503 (SEDE CHICLAYO)'
+            },
+            {
+                dia: 'Miércoles',
+                hora: '11:20 AM - 01:00 PM',
+                asignatura: 'Intervención en Problemas Psicosociales (AP2)',
+                docente: 'JAIME UCEDA, RICARDO ALBERTO',
+                ambiente: 'A-503 (SEDE CHICLAYO)'
+            },
+            {
+                dia: 'Miércoles',
+                hora: '06:50 PM - 09:20 PM',
+                asignatura: 'Consultoría de Servicios (AT1)',
+                docente: 'CORDOVA CANOVA, BORIS RICARDO',
+                ambiente: 'Clases Virtuales (SEDE CHICLAYO)'
+            },
+            {
+                dia: 'Miércoles',
+                hora: '09:20 PM - 11:00 PM',
+                asignatura: 'Consultoría de Servicios (AP1)',
+                docente: 'CORDOVA CANOVA, BORIS RICARDO',
+                ambiente: 'Clases Virtuales (SEDE CHICLAYO)'
+            },
+            {
+                dia: 'Viernes',
+                hora: '08:00 AM - 10:30 AM',
+                asignatura: 'Planes de Negocio (BT1)',
+                docente: 'CHAVARRY BECERRA, MILKEN RICARTTE',
+                ambiente: 'Laboratorio Cómputo 02 (SEDE CHICLAYO)'
+            },
+            {
+                dia: 'Viernes',
+                hora: '10:30 AM - 12:10 PM',
+                asignatura: 'Planes de Negocio (BP1)',
+                docente: 'CHAVARRY BECERRA, MILKEN RICARTTE',
+                ambiente: 'Laboratorio Cómputo 02 (SEDE CHICLAYO)'
+            },
+            {
+                dia: 'Domingo',
+                hora: '08:00 AM - 10:30 AM',
+                asignatura: 'Evaluación y Selección de Personas (AT1)',
+                docente: 'GONZALEZ RUEDA, NESTOR DANIEL',
+                ambiente: 'A-604 (SEDE CHICLAYO)'
+            },
+            {
+                dia: 'Domingo',
+                hora: '10:30 AM - 12:10 PM',
+                asignatura: 'Evaluación y Selección de Personas (AP1)',
+                docente: 'GONZALEZ RUEDA, NESTOR DANIEL',
+                ambiente: 'A-604 (SEDE CHICLAYO)'
+            }
+        ];
+
+        function filterDay(diaSeleccionado) {
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.textContent === diaSeleccionado) btn.classList.add('active');
+            });
+
+            const contenedor = document.getElementById('scheduleList');
+            contenedor.innerHTML = '';
+
+            const filtradas = horario.filter(item => item.dia === diaSeleccionado);
+
+            if(filtradas.length === 0) {
+                contenedor.innerHTML = `<div class="empty-day">☕ ¡Día libre! No tienes clases programadas.</div>`;
+                return;
+            }
+
+            filtradas.forEach(clase => {
+                contenedor.innerHTML += `
+                    <div class="schedule-item">
+                        <div class="schedule-time">⏰ ${clase.hora}</div>
+                        <div class="schedule-title">${clase.asignatura}</div>
+                        <div class="schedule-details">
+                            <span>👨‍🏫 <strong>Docente:</strong> ${clase.docente}</span>
+                            <span>📍 <strong>Ambiente:</strong> ${clase.ambiente}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Detectar el día actual de la semana en español
+        const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        const hoyStr = diasSemana[new Date().getDay()];
+        
+        // Inicializar con el día actual
+        const diaInicial = diasSemana.includes(hoyStr) ? hoyStr : 'Lunes';
+        filterDay(diaInicial);
+    </script>
+</body>
+</html>
